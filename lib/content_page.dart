@@ -16,47 +16,105 @@ class ContentPage extends StatelessWidget {
       ),
 
       body: SingleChildScrollView(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+        child: ValueListenableBuilder(
+          valueListenable: Configurations.attendanceNotifier,
+          builder: (context, value, child) {
 
-          itemCount: Configurations.attendance.length,
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
 
-          itemBuilder: (context, index) {
+              itemCount: value.length,
 
-            Attendance record = Configurations.attendance[index];
+              itemBuilder: (context, index) {
 
-            bool isPresent = record.getStatus() == 1;
+                Attendance record = value[index];
 
-            return Container(
-              margin: const EdgeInsets.all(10),
+                return GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
 
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        return AlertDialog(
+                          title: Text("Update Attendance"),
+                          content: Text("Select attendance status for ${record.getDate()}"),
 
-                children: [
+                          actions: [
 
-                  Text(
-                    record.getDate(),
-                    style: const TextStyle(fontSize: 20),
-                  ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Cancel"),
+                            ),
 
-                  CircleAvatar(
-                    backgroundColor:
-                        isPresent ? Colors.green : Colors.red,
+                            TextButton(
+                              onPressed: () {
 
-                    child: Text(
-                      isPresent ? "P" : "A",
-                      style: isPresent
-                          ? null
-                          : const TextStyle(color: Colors.white),
+                                record.setStatus(1);
+
+                                Configurations.attendanceNotifier.value =
+                                    List.from(Configurations.attendance);
+
+                                Navigator.pop(context);
+                              },
+                              child: Text("Present"),
+                            ),
+
+                            TextButton(
+                              onPressed: () {
+
+                                record.setStatus(0);
+
+                                Configurations.attendanceNotifier.value =
+                                    List.from(Configurations.attendance);
+
+                                Navigator.pop(context);
+                              },
+                              child: Text("Absent"),
+                            ),
+
+                          ],
+                        );
+
+                      },
+                    );
+
+                  },
+
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                      children: [
+
+                        Text(
+                          record.getDate(),
+                          style: const TextStyle(fontSize: 20),
+                        ),
+
+                        CircleAvatar(
+                          backgroundColor:
+                              record.getStatus() == 1 ? Colors.green : Colors.red,
+
+                          child: Text(
+                            record.getStatus() == 1 ? "P" : "A",
+                            style: record.getStatus() == 1
+                                ? null
+                                : const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             );
           },
-        ),
+        )
       ),
     );
   }

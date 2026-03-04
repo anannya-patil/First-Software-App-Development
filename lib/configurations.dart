@@ -1,4 +1,5 @@
 import 'attendance_model.dart';
+import 'package:flutter/material.dart';
 
 class Configurations {
 
@@ -32,6 +33,9 @@ class Configurations {
     Attendance(date: "24-03-2026", status: 1),
     Attendance(date: "25-03-2026", status: 1),
   ];
+
+  static ValueNotifier<List<Attendance>> attendanceNotifier =
+    ValueNotifier(attendance);
 
  static bool validateEmail(String text) {
    return RegExp(
