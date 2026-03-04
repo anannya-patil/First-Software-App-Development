@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:second_lab_app/register_page.dart';
 import 'package:second_lab_app/utility.dart';
 import 'package:second_lab_app/configurations.dart';
+import 'content_page.dart';
 
 void main() {
  runApp(const MyApp());
@@ -67,8 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
  String? _setUserIDErrorText(String value) {
    if (value.isEmpty) return 'Please enter email ID';
-   if (!Utility.validateEmail(value))
+   if (!Utility.validateEmail(value)) {
      return 'Please enter valid email ID';
+   }
    return null;
  }
 
@@ -127,8 +129,20 @@ class _MyHomePageState extends State<MyHomePage> {
            ElevatedButton(onPressed: validate, child: Text('Login')),
            ElevatedButton(onPressed: (){
              Navigator.push(context,MaterialPageRoute(builder: (context)=>RegisterPage()
-             ));
+             ),
+             );
            }, child: Text('Sign Up')),
+           ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ContentPage(),
+                ),
+              );
+            },
+            child: Text("content"),
+          ),
          ],
        ),
      ),
