@@ -3,6 +3,9 @@ import 'dart:convert';
 List<Product> productFromMap(String str) =>
     List<Product>.from(json.decode(str).map((x) => Product.fromMap(x)));
 
+Product productFromJson(String str) =>
+    Product.fromMap(json.decode(str));
+
 String productToMap(List<Product> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
@@ -28,11 +31,11 @@ class Product {
   factory Product.fromMap(Map<String, dynamic> json) => Product(
         id: json["id"],
         title: json["title"],
-        price: json["price"].toDouble(),
+        price: (json["price"] is int) ? (json["price"] as int).toDouble() : (json["price"] is double) ? json["price"] : double.parse(json["price"].toString()),
         description: json["description"],
         category: json["category"],
         image: json["image"],
-        rating: Rating.fromMap(json["rating"]),
+        rating: json["rating"] != null ? Rating.fromMap(json["rating"]) : Rating(rate: 0, count: 0),
       );
 
   Map<String, dynamic> toMap() => {

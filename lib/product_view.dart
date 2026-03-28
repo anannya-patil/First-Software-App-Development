@@ -13,12 +13,44 @@ class _ProductViewState extends State<ProductView> {
 
   late Future<http.Response> _response;
 
+  List<Product> products = [];
+  bool isLoaded = false;
+
   @override
   void initState() {
     super.initState();
 
     Uri url = Uri.https('fakestoreapi.com', '/products');
     _response = http.get(url);
+  }
+
+  Future<void> addProduct() async {
+
+    Uri url = Uri.https('fakestoreapi.com', '/products');
+
+    var response = await http.post(
+      url,
+      body: {
+        "title": "New Product",
+        "price": "999",
+        "description": "Added from app",
+        "image": "https://i.pravatar.cc",
+        "category": "electronics"
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+      // Fakestore returns single object which is decoded manually
+      final newProduct = productFromJson(response.body);
+
+      setState(() {
+        products.add(newProduct);
+      });
+
+    } else {
+      print("POST failed");
+    }
   }
 
   @override
@@ -55,8 +87,10 @@ class _ProductViewState extends State<ProductView> {
 
             if (snapshot.data!.statusCode == 200) {
 
-              List<Product> products =
-                  productFromMap(snapshot.data!.body);
+              if (!isLoaded) {
+                products = productFromMap(snapshot.data!.body);
+                isLoaded = true;
+              }
 
               return ListView.builder(
                 itemCount: products.length,
@@ -124,8 +158,32 @@ class _ProductViewState extends State<ProductView> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
+                                  // CATEGORY
                                   Text(p.category),
-                                  Text("₹ ${p.price}")
+
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text("Edit clicked")),
+                                          );
+                                        },
+                                        icon: const Icon(Icons.mode_edit, color: Colors.blue),
+                                      ),
+
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            products.removeAt(index);
+                                          });
+                                        },
+                                        icon: const Icon(Icons.delete_forever, color: Colors.red),
+                                      ),
+                                    ],
+                                  ),
+
+                                  Text("₹ ${p.price}"),
                                 ],
                               ),
                             ],
@@ -143,6 +201,11 @@ class _ProductViewState extends State<ProductView> {
 
           return const Center(child: Text("No data"));
         },
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: addProduct,
+        child: const Icon(Icons.add),
       ),
     );
   }
