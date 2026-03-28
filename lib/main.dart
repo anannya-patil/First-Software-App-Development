@@ -3,6 +3,7 @@ import 'package:second_lab_app/register_page.dart';
 import 'package:second_lab_app/utility.dart';
 import 'package:second_lab_app/configurations.dart';
 import 'content_page.dart';
+import 'product_view.dart';
 
 void main() {
  runApp(const MyApp());
@@ -126,13 +127,24 @@ class _MyHomePageState extends State<MyHomePage> {
                ),
              ),
            ),
-           ElevatedButton(onPressed: validate, child: Text('Login')),
-           ElevatedButton(onPressed: (){
-             Navigator.push(context,MaterialPageRoute(builder: (context)=>RegisterPage()
-             ),
-             );
-           }, child: Text('Sign Up')),
-           ElevatedButton(
+          ElevatedButton(
+            onPressed: validate,
+            child: Text('Login'),
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RegisterPage(),
+                ),
+              );
+            },
+            child: Text('Sign Up'),
+          ),
+
+          ElevatedButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -142,6 +154,18 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
             child: Text("content"),
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProductView(),
+                ),
+              );
+            },
+            child: Text("products"),
           ),
          ],
        ),

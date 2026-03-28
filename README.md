@@ -14,3 +14,9 @@ Semester 4 Software App Development Lab
 <img src="output_screenshots/lab2s1.png" width="250">
 <img src="output_screenshots/lab2s2.png" width="250">
 <img src="output_screenshots/lab2s3.png" width="250">
+
+## Lab 3 Output Screenshots
+
+<img src="output_screenshots/lab3s1.png" width="250">
+<img src="output_screenshots/lab3s2.png" width="250">
+<img src="output_screenshots/lab3s3.png" width="250">
