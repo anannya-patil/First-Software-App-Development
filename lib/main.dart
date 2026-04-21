@@ -58,19 +58,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (_userIDErrorText != null || _passwordErrorText != null) return;
 
-    bool success = await Utility.loginAPI(
+    String result = await Utility.loginAPI(
       _userID.text.trim(),
       _password.text.trim(),
     );
 
-    if (success) {
+    if (result == "success") {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const ToDoView()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login Failed')),
+        SnackBar(content: Text(result)),
       );
     }
   }

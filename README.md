@@ -28,5 +28,10 @@ Semester 4 Software App Development Lab
 
 ## Lab 5 Output Screenshots
 
+APK can be built using --obfuscate to prevent reverse engineering:
+```
+flutter build apk --obfuscate --split-debug-info=build/app/outputs/symbols
+```
+
 <img src="output_screenshots/lab5s1.png" width="250">
 <img src="output_screenshots/lab5s2.png" width="250">

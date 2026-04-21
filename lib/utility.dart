@@ -16,7 +16,7 @@ class Utility {
     ).hasMatch(text);
   }
 
-  static Future<bool> loginAPI(String userid, String password) async {
+  static Future<String> loginAPI(String userid, String password) async {
     try {
       var url = Uri.parse("https://json-placeholder.mock.beeceptor.com/login");
 
@@ -39,20 +39,29 @@ class Utility {
         } else if (data["success"] == true) {
           token = data["token"];
         } else {
-          return false;
+          return "Invalid response format";
         }
 
         Configurations.globalpref.setBool("isLoggedin", true);
         Configurations.globalpref.setString("token", token);
 
-        return true;
+        return "success";
       }
 
-      return false;
+      else if (response.statusCode == 401) {
+        return "Invalid credentials";
+      }
+
+      else if (response.statusCode >= 500) {
+        return "Server error. Try again later";
+      }
+
+      else {
+        return "Unexpected error: ${response.statusCode}";
+      }
 
     } catch (e) {
-      print(e);
-      return false;
+      return "Network error. Check your connection";
     }
   }
 }
